@@ -1,4 +1,4 @@
-Тhis project is for educational purposes. FashionWave is a simple e-commerce web application built with ASP.NET MVC.
+Тhis project is for educational purposes. FashionSh0p is a simple e-commerce web application built with ASP.NET MVC.
 This project allows users to browse products, add them to a shopping cart, and place orders.
 
 📌 Features
