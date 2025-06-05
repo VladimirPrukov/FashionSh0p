@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ProductViewModel>
+
+<h2 class="text-center my-4">Всички продукти</h2>
+
+<form id="anti-forgery-form" style="display:none;">
+    @Html.AntiForgeryToken()
+</form>
+
+<div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        @foreach (var product in Model)
+        {
+            <div class="product-card position-relative">
+                <a href="/Product/Details/@product.Id" class="image-wrapper">
+                    <img src="@product.ImageUrl" alt="@product.Name" class="product-image" />
+                </a>
+                    <button class="add-to-cart-btn" data-product-id="@product.Id">Добави в кошницата</button>
+                <h3>@product.Name</h3>
+                <p>@product.Price.ToString("F2") лв.</p>
+            </div>
+        }
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        updateCartCount();
+
+        document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const productId = this.getAttribute('data-product-id');
+                const quantity = 1;
+
+                fetch('/Cart/AddToCart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                    },
+                    body: JSON.stringify({ productId: parseInt(productId), quantity: quantity })
+
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            updateCartCount();
+                            showCartToast();
+                        } else {
+                            alert("Грешка при добавяне.");
+                        }
+                    });
+            });
+        });
+    });
+</script>

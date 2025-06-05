@@ -1,0 +1,59 @@
+﻿@model FashionWave.Models.OrderCreateViewModel
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow-sm rounded-3">
+                <div class="card-header bg-primary text-white text-center">
+                    <h2 class="mb-0">Потвърди поръчка</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div class="mb-4">
+                            <label asp-for="FullName" class="form-label">Име и фамилия</label>
+                            <input asp-for="FullName" class="form-control form-control-lg" placeholder="Например: Иван Иванов" />
+                            <span asp-validation-for="FullName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Address" class="form-label">Адрес</label>
+                            <input asp-for="Address" class="form-control form-control-lg" placeholder="Например: ул. „Пример“ 123, София" />
+                            <span asp-validation-for="Address" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Phone" class="form-label">Телефон</label>
+                            <input asp-for="Phone" class="form-control form-control-lg" placeholder="+359 88 123 4567" />
+                            <span asp-validation-for="Phone" class="text-danger small"></span>
+                        </div>
+
+                        <div class="border-top pt-3 mb-4">
+                            <h4 class="text-end mb-0">
+                                Обща сума:
+                                <span class="text-success">@Model.Total.ToString("F2") лв.</span>
+                            </h4>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" name="paymentType" value="cod" class="btn btn-success btn-lg">
+                                Завърши поръчката (наложен платеж)
+                            </button>
+                             
+                            <form asp-controller="Payment" asp-action="CreateCheckoutSession" method="post">
+                            <button type="submit" name="paymentType" value="card" class="btn btn-danger btn-lg">
+                                Плати с карта и вземи 5% отстъпка
+                            </button>
+                            </form>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
